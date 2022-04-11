@@ -91,18 +91,21 @@ class Sweeper:
 
     def checkClicked(self, mousePos, squareSize):
         y,x = math.floor(mousePos[0]/squareSize), math.floor(mousePos[1]/squareSize)
-        if not self.grid[x][y].isClicked and not self.grid[x][y].isFlagged and not self.grid[x][y].isQuestioned:
 
-            if self.grid[x][y].isMine:
-                return False
+        if x < len(self.grid[0]) and y < len(self.grid[0]):
+            if not self.grid[x][y].isClicked and not self.grid[x][y].isFlagged and not self.grid[x][y].isQuestioned:
 
-            else:
-                self.grid[x][y].isClicked = True
-                self.grid[x][y].isFlagged = False
-                self.grid[x][y].isQuestioned = False
-                if self.grid[x][y].neighbourMines == 0:
-                    self.checkNeighbours(x, y)
-                return True
+                if self.grid[x][y].isMine:
+                    return False
+
+                else:
+                    self.grid[x][y].isClicked = True
+                    self.grid[x][y].isFlagged = False
+                    self.grid[x][y].isQuestioned = False
+                    if self.grid[x][y].neighbourMines == 0:
+                        self.checkNeighbours(x, y)
+                    return True
+        return True
 
     def checkFlagged(self, mousePos, squareSize):
         y,x = math.floor(mousePos[0]/squareSize), math.floor(mousePos[1]/squareSize)

@@ -3,10 +3,14 @@ import sys
 import src.Flag as Flag
 import src.Mine as Mine
 from src.Sweeper import *
+# from screeninfo import get_monitors
+# import os
 
 class Visualize:
 
     def __init__(self):
+
+
         pygame.init()
         self.mines = []
         self.flags = []
