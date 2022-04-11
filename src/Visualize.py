@@ -234,19 +234,19 @@ class Visualize:
             for j in range(len(self.minesweeper.grid[i])):
                 if self.minesweeper.grid[i][j].isMine:
                     mine = Mine.Mine(self.surfaceColor, self.squareSize, self.squareSize)
-                    mine.rect.x = self.squareSize * i
-                    mine.rect.y = self.squareSize * j
+                    mine.rect.x = self.squareSize * j
+                    mine.rect.y = self.squareSize * i
                     self.mines.append(mine)
                 elif self.minesweeper.grid[i][j].isFlagged:
                     flag = Flag.Flag(self.surfaceColor, self.squareSize, self.squareSize)
-                    flag.rect.x = self.squareSize * i
-                    flag.rect.y = self.squareSize * j
+                    flag.rect.x = self.squareSize * j
+                    flag.rect.y = self.squareSize * i
                     self.flags.append(flag)
                 elif self.minesweeper.grid[i][j].isQuestioned:
                     self.questions.append((i,j))
 
                 else:
-                    square = pygame.Rect(i * self.squareSize, j * self.squareSize, self.squareSize, self.squareSize)
+                    square = pygame.Rect(j * self.squareSize, i * self.squareSize, self.squareSize, self.squareSize)
                     self.clickedSquares.append((square, (i, j)))
 
         self.drawMines()
@@ -277,7 +277,7 @@ class Visualize:
                         self.mines.append(mine)
 
                     else:
-                        square = pygame.Rect(i*self.squareSize, j*self.squareSize, self.squareSize, self.squareSize)
+                        square = pygame.Rect(j*self.squareSize, i*self.squareSize, self.squareSize, self.squareSize)
                         self.clickedSquares.append((square, (i,j)))
 
                 elif self.minesweeper.grid[i][j].isFlagged:
@@ -325,8 +325,10 @@ class Visualize:
     def drawClickedSquares(self):
         for square in self.clickedSquares:
             i,j = square[1]
+            # print(i,j)
             number = self.minesweeper.grid[i][j].neighbourMines
             text = self.font.render('', True, self.green)
+
             if number == 0:
                 pass
             elif number == 1:

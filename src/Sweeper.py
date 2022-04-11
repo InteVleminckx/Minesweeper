@@ -35,7 +35,8 @@ class Cell:
 
         for cell in surroundings:
             if cell is not None:
-                cell.addNeighbourMine()
+                if cell.isMine is False:
+                    cell.addNeighbourMine()
 
 class Sweeper:
 
@@ -76,7 +77,7 @@ class Sweeper:
                     rand = ra.randint(0,100) / 100
                     chance = mines / fields
                     if rand < chance:
-                        if not self.grid[i][j].isMine:
+                        if not self.grid[i][j].isMine and self.grid[i][j].neighbourMines == 0:
                             self.grid[i][j].isMine = True
                             self.grid[i][j].setSurroundings(self.grid)
                             mines -= 1
@@ -85,7 +86,6 @@ class Sweeper:
 
     def checkClicked(self, mousePos, squareSize):
         y,x = math.floor(mousePos[0]/squareSize), math.floor(mousePos[1]/squareSize)
-
         if not self.grid[x][y].isClicked and not self.grid[x][y].isFlagged and not self.grid[x][y].isQuestioned:
 
             if self.grid[x][y].isMine:
