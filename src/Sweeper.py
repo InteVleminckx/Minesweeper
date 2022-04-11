@@ -46,6 +46,7 @@ class Sweeper:
         self.grid = list()
         self.mines = None
         self.squares = None
+        self.numberFlags = None
 
     def start(self, difficulty):
         if difficulty == 0:
@@ -60,6 +61,8 @@ class Sweeper:
             self.createGrid(24,99)
             self.mines = 99
             self.squares = 24 * 24
+
+        self.numberFlags = self.mines
 
     def createGrid(self, size, mines):
 
@@ -106,15 +109,16 @@ class Sweeper:
         if not self.grid[x][y].isClicked:
             if not self.grid[x][y].isFlagged and not self.grid[x][y].isQuestioned:
                 self.grid[x][y].isFlagged = True
+                self.numberFlags -= 1
 
             elif self.grid[x][y].isFlagged and not self.grid[x][y].isQuestioned:
                 self.grid[x][y].isFlagged = False
+                self.numberFlags += 1
                 self.grid[x][y].isQuestioned = True
 
             elif not self.grid[x][y].isFlagged and self.grid[x][y].isQuestioned:
                 self.grid[x][y].isFlagged = False
                 self.grid[x][y].isQuestioned = False
-
 
     def checkNeighbours(self, x, y):
 

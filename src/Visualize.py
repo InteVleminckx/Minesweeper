@@ -35,8 +35,7 @@ class Visualize:
         self.minesweeper = minesweeper
         size = len(self.minesweeper.grid[0])
         self.width = size*self.squareSize
-        self.height = size*self.squareSize
-        # self.surface = pygame.display.set_mode((self.width, self.height))
+        self.height = size*self.squareSize + 50
         pygame.display.set_mode((self.width, self.height))
 
     def gameLoop(self):
@@ -79,7 +78,6 @@ class Visualize:
                             clicked = False
                             mineSweeper = Sweeper()
                             mineSweeper.start(difficulty)
-                            mineSweeper.printGrid()
                             self.initialize(mineSweeper)
 
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
@@ -112,6 +110,7 @@ class Visualize:
         self.drawClickedSquares()
         self.drawMines()
         self.drawGrid()
+        self.drawNumberOfFlags()
 
     def menu(self):
         self.surface.fill(self.surfaceColor)
@@ -224,6 +223,14 @@ class Visualize:
         pygame.quit()
         sys.exit()
 
+
+    def drawNumberOfFlags(self):
+        stri = "FLAGS: " + str(self.minesweeper.numberFlags)
+        text = self.MenuFont.render(stri, True, self.red)
+        textRect = text.get_rect()
+        textRect.center = (self.width/2, self.height-25)
+        self.surface.blit(text, textRect)
+
     def drawAll(self):
         self.mines.clear()
         self.questions.clear()
@@ -255,6 +262,7 @@ class Visualize:
         self.drawGrid()
         self.drawQuestions()
         self.drawClickedSquares()
+        self.drawNumberOfFlags()
 
     def drawGrid(self):
         for i in range(len(self.minesweeper.grid)):
