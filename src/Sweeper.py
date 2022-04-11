@@ -24,19 +24,21 @@ class Cell:
 
     def setSurroundings(self, grid):
 
-        surroundings = [grid[self.positionX-1][self.positionY] if self.positionX - 1 >= 0 else None,
-                        grid[self.positionX-1][self.positionY-1] if (self.positionX - 1 >= 0 and self.positionY - 1 >= 0) else None,
-                        grid[self.positionX][self.positionY-1] if self.positionY - 1 >= 0 else None,
-                        grid[self.positionX+1][self.positionY-1] if (self.positionX + 1 <= 8 and self.positionY - 1 >= 0) else None,
-                        grid[self.positionX+1][self.positionY] if self.positionX + 1 <= 8 else None,
-                        grid[self.positionX+1][self.positionY+1] if (self.positionX + 1 <= 8 and self.positionY + 1 <= 8) else None,
-                        grid[self.positionX][self.positionY+1] if self.positionY + 1 <= 8 else None,
-                        grid[self.positionX-1][self.positionY+1] if (self.positionX - 1 >= 0 and self.positionY + 1 <= 8) else None,]
+        size = len(grid[0]) - 1
+
+        surroundings = [grid[self.positionX-1][self.positionY]      if self.positionX - 1 >= 0                               else None,
+                        grid[self.positionX-1][self.positionY-1]    if (self.positionX - 1 >= 0 and self.positionY - 1 >= 0) else None,
+                        grid[self.positionX][self.positionY-1]      if self.positionY - 1 >= 0                               else None,
+                        grid[self.positionX+1][self.positionY-1]    if (self.positionX + 1 <= size and self.positionY - 1 >= 0) else None,
+                        grid[self.positionX+1][self.positionY]      if self.positionX + 1 <= size                               else None,
+                        grid[self.positionX+1][self.positionY+1]    if (self.positionX + 1 <= size and self.positionY + 1 <= size) else None,
+                        grid[self.positionX][self.positionY+1]      if self.positionY + 1 <= size                               else None,
+                        grid[self.positionX-1][self.positionY+1]    if (self.positionX - 1 >= 0 and self.positionY + 1 <= size) else None
+                        ]
 
         for cell in surroundings:
             if cell is not None:
-                if cell.isMine is False:
-                    cell.addNeighbourMine()
+                cell.addNeighbourMine()
 
 class Sweeper:
 
@@ -95,7 +97,8 @@ class Sweeper:
                 self.grid[x][y].isClicked = True
                 self.grid[x][y].isFlagged = False
                 self.grid[x][y].isQuestioned = False
-                self.checkNeighbours(x, y)
+                if self.grid[x][y].neighbourMines == 0:
+                    self.checkNeighbours(x, y)
                 return True
 
     def checkFlagged(self, mousePos, squareSize):
@@ -114,20 +117,24 @@ class Sweeper:
 
 
     def checkNeighbours(self, x, y):
+
+        size = len(self.grid[0])-1
+
         surroundings = [self.grid[x-1][y] if x - 1 >= 0 else None,
                         self.grid[x][y-1] if y - 1 >= 0 else None,
-                        self.grid[x+1][y] if x + 1 <= 8 else None,
-                        self.grid[x][y+1] if y + 1 <= 8 else None
+                        self.grid[x+1][y] if x + 1 <= size else None,
+                        self.grid[x][y+1] if y + 1 <= size else None
                         ]
 
         for neighbour in surroundings:
             if neighbour is not None:
-                if neighbour.neighbourMines == 0 and neighbour.isFlagged is False and \
+                if neighbour.isFlagged is False and \
                     neighbour.isQuestioned is False and neighbour.isClicked is False and \
                         neighbour.isMine is False:
 
                         neighbour.isClicked = True
-                        self.checkNeighbours(neighbour.positionX, neighbour.positionY)
+                        if neighbour.neighbourMines == 0:
+                            self.checkNeighbours(neighbour.positionX, neighbour.positionY)
 
     def checkWin(self):
         counterFlags = 0

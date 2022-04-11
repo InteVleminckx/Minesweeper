@@ -79,6 +79,7 @@ class Visualize:
                             clicked = False
                             mineSweeper = Sweeper()
                             mineSweeper.start(difficulty)
+                            mineSweeper.printGrid()
                             self.initialize(mineSweeper)
 
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
